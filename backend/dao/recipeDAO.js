@@ -1,5 +1,6 @@
 import mongodb from "mongodb"
 
+const ObjectId = mongodb.ObjectId
 let recipe
 
 export default class recipeDAO {
@@ -8,7 +9,6 @@ export default class recipeDAO {
             return
         }
         try {
-
             recipe = await conn.db(process.env.RECIPES_NS).collection("recipes")
 
         } catch (e) {
@@ -30,9 +30,9 @@ export default class recipeDAO {
                 query = { $text: { $search: filters["name"] } }
             } else if ("ingredients" in filters) {
                 query = { "ingredients": { $eq: filters["ingredients"] } }
-            } 
+            }
         }
-        
+
         let cursor
 
         try {
@@ -58,8 +58,59 @@ export default class recipeDAO {
             return { recipeList: [], totalNumrecipes: 0 }
         }
     }
-    /*
-    static async getRestaurantByID(id) {
+
+
+
+   
+
+    static async addRecipe(name, description, ingredients) {
+        try {
+            const recipeDoc = {
+                name:  name,
+                description: description,
+                ingredients: ingredients,
+            }
+
+            return await recipe.insertOne(recipeDoc)
+        } catch (e) {
+            console.error(`Unable to add recipe: ${e}`)
+            return { error: e }
+        }
+    }
+
+    static async updateRecipe(_id, name, description, ingredients) {
+        try {
+            const updateResponse = await recipe.updateOne(
+                { _id: ObjectId(_id) },
+                { $set: { name: name, description: description,ingredients: ingredients } },
+            )
+
+            return updateResponse
+        } catch (e) {
+            console.error(`Unable to update recipe: ${e}`)
+            return { error: e }
+        }
+    }
+
+    static async deleteRecipe(_id) {
+
+        try {
+            const deleteResponse = await recipe.deleteOne({
+                _id: ObjectId(_id),
+            })
+ 
+            return deleteResponse
+        } catch (e) {
+            console.error(`Unable to delete recipe: ${e}`)
+            return { error: e }
+        }
+    }
+
+
+
+
+    
+    static async getRecipeById(id) {
         try {
             const pipeline = [
                 {
@@ -69,7 +120,7 @@ export default class recipeDAO {
                 },
                 {
                     $lookup: {
-                        from: "reviews",
+                        from: "recipes",
                         let: {
                             id: "$_id",
                         },
@@ -77,7 +128,7 @@ export default class recipeDAO {
                             {
                                 $match: {
                                     $expr: {
-                                        $eq: ["$restaurant_id", "$$id"],
+                                        $eq: ["$_id", "$$id"],
                                     },
                                 },
                             },
@@ -87,32 +138,33 @@ export default class recipeDAO {
                                 },
                             },
                         ],
-                        as: "reviews",
+                        as: "recipes",
                     },
                 },
                 {
                     $addFields: {
-                        reviews: "$reviews",
+                        recipes: "$recipes",
                     },
                 },
             ]
+            console.log(pipeline)
             return await recipe.aggregate(pipeline).next()
         } catch (e) {
-            console.error(`Something went wrong in getRestaurantByID: ${e}`)
+            console.error(`Something went wrong in getRecipeById: ${e}`)
             throw e
         }
     }
 
-    static async getCuisines() {
-        let cuisines = []
+    static async getIngredients() {
+        let ingredients = []
         try {
-            cuisines = await recipe.distinct("cuisine")
-            return cuisines
+            ingredients = await recipe.distinct("ingredients")
+            return ingredients
         } catch (e) {
-            console.error(`Unable to get cuisines, ${e}`)
-            return cuisines
+            console.error(`Unable to get ingredients, ${e}`)
+            return ingredients
         }
-    }*/
+    }
 }
 
 
