@@ -25,7 +25,7 @@ export default class RecipeController {
             entries_per_page: recipesPerPage,
             total_results: totalNumrecipes,
         }
-
+        //console.log(response)
         res.json(response)
     }
 
@@ -50,7 +50,7 @@ export default class RecipeController {
 
     static async apiUpdateRecipe(req, res, next) {
         try {
-            const _id = req.body._id;
+            const _id = req.body.id;
             const name = req.body.name;
             const description = req.body.description;
             const ingredients = req.body.ingredients;
@@ -81,7 +81,9 @@ export default class RecipeController {
 
     static async apiDeleteRecipe(req, res, next) {
         try {
-            const recipeId = req.body._id
+            const recipeId = req.query.id //iz urla
+            console.log(recipeId)
+            //const recipeId = req.body.id iz bodija
             console.log(recipeId)
             const RecipeResponse = await recipeDAO.deleteRecipe(
                 recipeId,
@@ -93,7 +95,7 @@ export default class RecipeController {
     }
 
 
-    
+
     static async apiGetRecipeById(req, res, next) {
         try {
             let id = req.params.id || {}
