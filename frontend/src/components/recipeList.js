@@ -145,9 +145,9 @@ const RecipeList = props => {
           <li className="page-item active">
             <a className="page-link" href="#">{pageN + 1} <span className="sr-only"></span></a>
           </li>
-          {pageN + 1 < Math.floor((totalNumrecipes + 5) / 8) ? <li className="page-item"><a className="page-link" onClick={incPageN} href="#">{pageN + 1 + 1}</a></li> : <div></div>}
+          {pageN  < Math.floor((totalNumrecipes + 5) / 8) ? <li className="page-item"><a className="page-link" onClick={incPageN} href="#">{pageN + 1 + 1}</a></li> : <div></div>}
           <li className="page-item">
-            {pageN + 1 < Math.floor((totalNumrecipes + 5) / 8) ? <button
+            {pageN  < Math.floor((totalNumrecipes + 5) / 8) ? <button
               className="btn btn-outline-secondary"
               type="button"
               onClick={incPageN}> Next
