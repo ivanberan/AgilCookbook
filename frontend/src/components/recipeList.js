@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import RecipeDataServices from "../services/recipe";
 import { Link } from "react-router-dom";
-
+import RecipeCard from "./recipeCard"
 const RecipeList = props => {
 
   const [recipes, setRecipes] = useState([]);
@@ -110,9 +110,6 @@ const RecipeList = props => {
               Search
             </button>
           </div>
-        </div>
-
-        <div className="input-group col-lg-4">
           <select onChange={onChangeSearchIng}>
             {allIngredients.map(ingredient => {
               return (
@@ -131,25 +128,7 @@ const RecipeList = props => {
       <div className="row">
         {recipes.map((recipe) => {
           return (
-            <div className="col-lg-4 pb-1">
-              <div className="card">
-                <div className="card-body" >
-                  <h5 className="card-title">{recipe.name}</h5>
-                  {recipe.img ?
-                    <img src={recipe.img} className="img-fluid rounded-circle" alt="..."></img>
-                    : <img src="https://img.freepik.com/free-vector/meatball-food-cartoon-your-business_98143-42.jpg" className="img-fluid rounded-circle" alt="..."></img>}
-                  <p className="card-text">
-                    <strong>Ingredients: </strong>{recipe.ingredients.join(", ")}
-                  </p>
-                  <div className="row">
-                    <Link to={"/recipe/" + recipe._id} className="btn btn-outline-secondary col-lg-5 mx-1 mb-1">
-                      Show details
-                    </Link>
-                    <a onClick={() => deleteRecipe(recipe._id)} className="btn btn-danger col-lg-5 mx-1 mb-1">Delete</a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <RecipeCard data={recipe} deleteFunction={deleteRecipe} />
           );
         })}
       </div>
@@ -166,9 +145,9 @@ const RecipeList = props => {
           <li className="page-item active">
             <a className="page-link" href="#">{pageN + 1} <span className="sr-only"></span></a>
           </li>
-          {pageN + 1 < Math.floor((totalNumrecipes + 5) / 6) ? <li className="page-item"><a className="page-link" onClick={incPageN} href="#">{pageN + 1 + 1}</a></li> : <div></div>}
+          {pageN + 1 < Math.floor((totalNumrecipes + 5) / 8) ? <li className="page-item"><a className="page-link" onClick={incPageN} href="#">{pageN + 1 + 1}</a></li> : <div></div>}
           <li className="page-item">
-            {pageN + 1 < Math.floor((totalNumrecipes + 5) / 6) ? <button
+            {pageN + 1 < Math.floor((totalNumrecipes + 5) / 8) ? <button
               className="btn btn-outline-secondary"
               type="button"
               onClick={incPageN}> Next

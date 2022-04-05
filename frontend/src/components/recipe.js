@@ -125,13 +125,13 @@ const Recipe = props => {
             Back
           </button>
         </div>
-        ) : <div class="card" >
-          <div class="card" >
-            <div class="card-body">
-              <h5 class="card-title">{recipe.name}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{recipe.ingredients.join(", ")}</h6>
-              <p class="card-text">{recipe.description}</p>
-              <button onClick={changeEditFlag} class="btn btn-outline-secondary">Edit </button>
+        ) : <div className="card" >
+          <div className="card" >
+            <div className="card-body">
+              <h5 className="card-title">{recipe.name}</h5>
+              <h6 className="card-subtitle mb-2 text-muted">{recipe.ingredients.join(", ")}</h6>
+              <p className="card-text">{recipe.description}</p>
+              <button onClick={changeEditFlag} className="btn btn-outline-secondary">Edit </button>
             </div>
           </div>
 

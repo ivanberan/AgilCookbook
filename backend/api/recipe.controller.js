@@ -2,7 +2,7 @@ import recipeDAO from "../dao/recipeDAO.js"
 
 export default class RecipeController {
     static async apiGetRecipes(req, res, next) {
-        const recipesPerPage = req.query.recipesPerPage ? parseInt(req.query.recipesPerPage, 10) : 6
+        const recipesPerPage = req.query.recipesPerPage ? parseInt(req.query.recipesPerPage, 10) : 8
         const page = req.query.page ? parseInt(req.query.page, 10) : 0
 
         let filters = {}
