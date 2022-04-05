@@ -13,7 +13,6 @@ const Recipe = props => {
   const [recipeId, setRecipeId] = useState(window.location.href.substring(window.location.href.lastIndexOf("/") + 1))
   const [recipe, setRecipe] = useState(recipeState);
   const [editFlag, setEditFlag] = useState(false)
-  ///
 
 
   const [name, setName] = useState("");
@@ -29,6 +28,7 @@ const Recipe = props => {
   };
   const handleInputIngredients = event => {
     let ingredients = event.target.value;
+    ingredients=ingredients.split(",")
     setIngredients(ingredients);
   };
   const refreshForm = () => {
@@ -38,7 +38,6 @@ const Recipe = props => {
   }
 
   const updateRecipe = () => {
-
     var data = {
       id: recipeId,
       name: name,
@@ -49,19 +48,11 @@ const Recipe = props => {
     RecipeDataServices.updateRecipe(data)
       .then(response => {
         changeEditFlag()
-        console.log(response.data);
       })
       .catch(e => {
         console.log(e);
       });
-
-
   }
-
-
-  ////
-
-
 
   const changeEditFlag = () => {
     setEditFlag(!editFlag)
@@ -71,7 +62,6 @@ const Recipe = props => {
     RecipeDataServices.get(id)
       .then(response => {
         setRecipe(response.data);
-        console.log(response.data);
       })
       .catch(e => {
         console.log(e);
@@ -87,7 +77,7 @@ const Recipe = props => {
     setIngredients(recipe.ingredients)
     getRecipe(recipeId);
   }, [editFlag]);
- 
+
 
   return (
     <div>
@@ -95,7 +85,6 @@ const Recipe = props => {
         (<div>
           <div className="form-group">
             <label htmlFor="name">Recipe name</label>
-
             <input
               type="text"
               className="form-control"
@@ -107,7 +96,6 @@ const Recipe = props => {
             />
             <br />
             <label htmlFor="name">Description</label>
-
             <input
               type="text"
               className="form-control "
@@ -119,7 +107,6 @@ const Recipe = props => {
             />
             <br />
             <label htmlFor="name">Ingredients</label>
-
             <input
               type="text"
               className="form-control"
@@ -130,7 +117,7 @@ const Recipe = props => {
               name="text"
             />
           </div>
-          <br/>
+          <br />
           <button onClick={updateRecipe} className="btn btn-success">
             Save
           </button>

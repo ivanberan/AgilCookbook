@@ -1,11 +1,11 @@
 import http from "../http-common";
 
 class RecipeDataServices {
-    getAll(page = 0) {
-        return http.get(`/`);
+    getAll(page = 1) {
+        return http.get(`/?page=${page}`);
     }
     /*getAll(page = 0) {
-        return http.get(`/page=${page}`);
+        return http.get(`/?page=${page}`);
     }*/
 
     get(id) {
@@ -17,8 +17,6 @@ class RecipeDataServices {
     }
 
     addRecipe(data) {
-        console.log("!!!!!")
-
         return http.post("/recipe", data);
     }
 

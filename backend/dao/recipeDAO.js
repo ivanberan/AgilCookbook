@@ -49,7 +49,6 @@ export default class recipeDAO {
             const recipeList = await displayCursor.toArray()
             const totalNumrecipes = await recipe.countDocuments(query)
 
-
             return { recipeList, totalNumrecipes }
         } catch (e) {
             console.error(
@@ -63,12 +62,13 @@ export default class recipeDAO {
 
    
 
-    static async addRecipe(name, description, ingredients) {
+    static async addRecipe(name, description, ingredients, img) {
         try {
             const recipeDoc = {
                 name:  name,
                 description: description,
                 ingredients: ingredients,
+                img: img,
             }
 
             return await recipe.insertOne(recipeDoc)
@@ -147,7 +147,6 @@ export default class recipeDAO {
                     },
                 },
             ]
-            console.log(pipeline)
             return await recipe.aggregate(pipeline).next()
         } catch (e) {
             console.error(`Something went wrong in getRecipeById: ${e}`)

@@ -8,11 +8,20 @@ const RecipeList = props => {
   const [searchName, setSearchName] = useState("");
   const [searchIngredients, setSearchIngredients] = useState("");
   const [allIngredients, setAllIngredients] = useState(["Pick Ingredient"]);
+  const [pageN, setPageN] = useState(0)
+  const [totalNumrecipes, settotalNumrecipes] = useState(0)
 
   useEffect(() => {
     retriveRecipes();
     retriveIngredients();
-  }, [])
+  }, [pageN])
+
+  const incPageN = () => {
+    setPageN(pageN + 1)
+  }
+  const lowerPageN = () => {
+    setPageN(pageN - 1)
+  }
 
   const onChangeSearchName = e => {
     const searchName = e.target.value;
@@ -24,16 +33,11 @@ const RecipeList = props => {
     setSearchIngredients(searchZip);
   };
 
-
-
-
-
   const retriveRecipes = () => {
-    RecipeDataServices.getAll()
+    RecipeDataServices.getAll(pageN)
       .then(response => {
-        console.log(response.data);
-        setRecipes(response.data.recipes); // mozda ne radi?
-
+        setRecipes(response.data.recipes);
+        settotalNumrecipes(response.data.total_results)
       })
       .catch(e => {
         console.log(e);
@@ -43,15 +47,12 @@ const RecipeList = props => {
   const retriveIngredients = () => {
     RecipeDataServices.getIngredients()
       .then(response => {
-        console.log(response.data);
         setAllIngredients(["Pick Ingredient"].concat(response.data));
-
       })
       .catch(e => {
         console.log(e);
       });
   };
-
 
   const refreshList = () => {
     retriveRecipes();
@@ -60,8 +61,7 @@ const RecipeList = props => {
   const find = (query, by) => {
     RecipeDataServices.find(query, by)
       .then(response => {
-        console.log(response.data);
-        setRecipes(response.data.recipes); // ????
+        setRecipes(response.data.recipes);
       })
       .catch(e => {
         console.log(e);
@@ -81,12 +81,9 @@ const RecipeList = props => {
     }
   };
 
-  
+
 
   const deleteRecipe = (recipeId) => {
-    console.log("!!!!!!!!!!!!!!!!!");
-
-    console.log(recipeId);
     RecipeDataServices.deleteRecipe(recipeId)
       .then(response => {
         retriveRecipes()
@@ -96,22 +93,6 @@ const RecipeList = props => {
         console.log(e);
       });
   };
-
-
-  // const deleteRecipe = (recipeId, index) => {
-  //   RecipeDataServices.deleteRecipe(recipeId)
-  //     .then(response => {
-  //       setRecipes((prevState) => {
-  //         prevState.reviews.splice(index, 1)
-  //         return ({
-  //           ...prevState
-  //         })
-  //       })
-  //     })
-  //     .catch(e => {
-  //       console.log(e);
-  //     });
-  // };
 
   return (
     <div>
@@ -125,11 +106,7 @@ const RecipeList = props => {
             size="50"
           />
           <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={findByName}
-            >
+            <button className="btn btn-outline-secondary" type="button" onClick={findByName}>
               Search
             </button>
           </div>
@@ -144,11 +121,7 @@ const RecipeList = props => {
             })}
           </select>
           <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={findByIngridient}
-            >
+            <button className="btn btn-outline-secondary" type="button" onClick={findByIngridient}>
               Search
             </button>
           </div>
@@ -156,17 +129,16 @@ const RecipeList = props => {
       </div>
       <br />
       <div className="row">
-        {recipes.map((recipe, index) => {
+        {recipes.map((recipe) => {
           return (
-            <div className="col-lg-4 pb-1" key={recipe.id}>
+            <div className="col-lg-4 pb-1">
               <div className="card">
-                <div className="card-body">
+                <div className="card-body" >
                   <h5 className="card-title">{recipe.name}</h5>
                   {recipe.img ?
-                  <img src={recipe.img} class="img-fluid rounded-circle" alt="..."></img>
-:                  <img src="https://img.freepik.com/free-vector/meatball-food-cartoon-your-business_98143-42.jpg" class="img-fluid rounded-circle" alt="..."></img>}
+                    <img src={recipe.img} className="img-fluid rounded-circle" alt="..."></img>
+                    : <img src="https://img.freepik.com/free-vector/meatball-food-cartoon-your-business_98143-42.jpg" className="img-fluid rounded-circle" alt="..."></img>}
                   <p className="card-text">
-                    {/*<strong>Description: </strong>{recipe.description}<br />*/}
                     <strong>Ingredients: </strong>{recipe.ingredients.join(", ")}
                   </p>
                   <div className="row">
@@ -180,9 +152,30 @@ const RecipeList = props => {
             </div>
           );
         })}
-
-
       </div>
+      <nav aria-label="...">
+        <ul className="pagination">
+          <li className="page-item">
+            {pageN > 0 ? <button
+              className="btn btn-outline-secondary"
+              type="button"
+              onClick={lowerPageN}> Previous
+            </button> : <div></div>}
+          </li>
+          {pageN > 0 ? <li className="page-item"><a className="page-link" onClick={lowerPageN} href="#">{pageN - 1 + 1}</a></li> : <div></div>}
+          <li className="page-item active">
+            <a className="page-link" href="#">{pageN + 1} <span className="sr-only"></span></a>
+          </li>
+          {pageN + 1 < Math.floor((totalNumrecipes + 5) / 6) ? <li className="page-item"><a className="page-link" onClick={incPageN} href="#">{pageN + 1 + 1}</a></li> : <div></div>}
+          <li className="page-item">
+            {pageN + 1 < Math.floor((totalNumrecipes + 5) / 6) ? <button
+              className="btn btn-outline-secondary"
+              type="button"
+              onClick={incPageN}> Next
+            </button> : <div></div>}
+          </li>
+        </ul>
+      </nav>
     </div>
   );
 };

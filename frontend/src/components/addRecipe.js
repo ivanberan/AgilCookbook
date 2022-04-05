@@ -24,7 +24,7 @@ const AddRecipe = props => {
   };
 
 const handleSetImg = event => {
-    setDescription(event.target.value);
+    setImg(event.target.value);
   };
 
   const refreshForm = () =>{
@@ -38,22 +38,17 @@ const handleSetImg = event => {
     var data = {
       name: name,
       description:description,
-      ingredients: ingredients.split(",")
+      ingredients: ingredients.split(","),
+      img: img
     };
-    console.log(data)
-
     RecipeDataServices.addRecipe(data)
     .then(response => {
       refreshForm()
-      console.log(response.data);
     })
     .catch(e => {
       console.log(e);
     });
-
-
   }
-
 
   return (
     <div>
@@ -70,7 +65,6 @@ const handleSetImg = event => {
             name="text"
           />
           <br />
-
           <label htmlFor="description"> Description</label>
           <input
             type="text"
@@ -82,7 +76,6 @@ const handleSetImg = event => {
             name="text"
           />
           <br />
-
           <label htmlFor="ingredients"> Ingredients</label>
           <input
             type="text"
@@ -93,12 +86,21 @@ const handleSetImg = event => {
             onChange={handleInputIngredients}
             name="text"
           />
+          <label htmlFor="ingredients"> Image </label>
+          <input
+            type="text"
+            className="form-control"
+            id="Image"
+            value={img}
+            required
+            onChange={handleSetImg}
+            name="text"
+          />
         </div>
         <button onClick={saveRecipe} className="btn btn-success">
           Add recipe
         </button>
       </div>
-
     </div>
   );
 };

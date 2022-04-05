@@ -5,9 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import AddRecipe from "./components/addRecipe";
 import RecipeList from "./components/recipeList";
 import Recipe from "./components/recipe";
+import PageNotFound from "./components/pageNotFound";
 
-import logo from './logo.svg';
-import './App.css';
 
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
               Add new recipe
             </Link>
           </li>
-
         </div>
       </nav>
 
@@ -31,23 +29,11 @@ function App() {
         <Routes>
           <Route path="/" element={<RecipeList />} />
           <Route path="/addRecipe" element={<AddRecipe />} />
-          <Route path="/recipe/:id" element={<Recipe />}/>
-          {/* <Route path="/recipe/:id" render={(props) => (
-            <Recipe {...props}  />
-          )} />  */}
-        </Routes>
-        {/* <Routes>
-          <Route path={["/", "/recipes"]} element={<recipeList />} />
-          <Route path="/recipe" element={<recipeList />}
-          />
-          <Route
-            path="/recipe/:id"
-            render={(props) => (
-              <Recipe {...props} />
-            )}
-          />
+          <Route path="/recipe/:id" element={<Recipe />} />
+          <Route path="*" element={<PageNotFound />} />
 
-        </Routes> */}
+        </Routes>
+
 
       </div>
     </div>

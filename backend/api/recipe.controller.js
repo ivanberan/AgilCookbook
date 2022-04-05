@@ -2,7 +2,7 @@ import recipeDAO from "../dao/recipeDAO.js"
 
 export default class RecipeController {
     static async apiGetRecipes(req, res, next) {
-        const recipesPerPage = req.query.recipesPerPage ? parseInt(req.query.recipesPerPage, 10) : 10
+        const recipesPerPage = req.query.recipesPerPage ? parseInt(req.query.recipesPerPage, 10) : 6
         const page = req.query.page ? parseInt(req.query.page, 10) : 0
 
         let filters = {}
@@ -25,7 +25,6 @@ export default class RecipeController {
             entries_per_page: recipesPerPage,
             total_results: totalNumrecipes,
         }
-        //console.log(response)
         res.json(response)
     }
 
@@ -35,12 +34,13 @@ export default class RecipeController {
             const name = req.body.name;
             const description = req.body.description;
             const ingredients = req.body.ingredients;
-
+            const img = req.body.img
 
             const RecipeResponse = await recipeDAO.addRecipe(
                 name,
                 description,
                 ingredients,
+                img,
             )
             res.json({ status: "success" })
         } catch (e) {
@@ -81,10 +81,8 @@ export default class RecipeController {
 
     static async apiDeleteRecipe(req, res, next) {
         try {
-            const recipeId = req.query.id //iz urla
-            console.log(recipeId)
-            //const recipeId = req.body.id iz bodija
-            console.log(recipeId)
+            const recipeId = req.query.id
+            //const recipeId = req.body.id 
             const RecipeResponse = await recipeDAO.deleteRecipe(
                 recipeId,
             )
